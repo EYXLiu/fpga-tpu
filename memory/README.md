@@ -9,7 +9,12 @@
 - **USB** is the communication protocol between the computer and the FPGA
     - Dataflow is `USB -> DRAM -> BRAM`
     - BRAM only stores the chunks the model is looking at, DRAM stores the matrices
+- **Dual Port Unified Buffer** provides parallel access to memory without making hardware expensive
+    - in one clock cycle, you can access two different addresses
+    - why not scale to 4 ports ? 8 ports ? we run into hardware issues (it might not support multiple writes (or reads)) FGPA BRAM is commonly designed with dual-port capabilities
+        - also significantly more memory is required specifically for the access variables, which is less memory for everything else
+    - we can instead use memory banks, which is memory split into chunks where each is access asynchronously 
 - **Reads and Writes**
-    - As well, race conditions occur when you set variables and also have the UB checking at the same time. Thus we set values on negedge and check on posedge + 1
+    - race conditions occur when you set variables and also have the UB checking at the same time. Thus we set values on negedge and check on posedge + 1
         - @(negedge clk); // set variables
         - @(posedge clk); #1; // check reads/writes
