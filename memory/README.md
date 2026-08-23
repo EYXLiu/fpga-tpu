@@ -9,3 +9,7 @@
 - **USB** is the communication protocol between the computer and the FPGA
     - Dataflow is `USB -> DRAM -> BRAM`
     - BRAM only stores the chunks the model is looking at, DRAM stores the matrices
+- **Reads and Writes**
+    - As well, race conditions occur when you set variables and also have the UB checking at the same time. Thus we set values on negedge and check on posedge + 1
+        - @(negedge clk); // set variables
+        - @(posedge clk); #1; // check reads/writes
