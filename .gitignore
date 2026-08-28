@@ -1,5 +1,6 @@
 obj_dir/
 impl/
+.venv/
 
 *.vcd
 *.fst
