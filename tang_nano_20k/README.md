@@ -10,6 +10,7 @@ Basic architecture:
 - User buttons: 88, 87 (also inverted)
 - Leds: 15, 16, 17, 18, 19, 20
 - Clock: 4
+- UART: 69 (tx), 70 (rx)
 
 #### Python Serial Port
 - In terminal, run `ls /dev/cu.*` for all serial connections
