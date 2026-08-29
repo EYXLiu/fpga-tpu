@@ -1,4 +1,10 @@
 ## Notes
+Basic architecture:
+- Write:
+    - Python -> uart_rx -> parser -> memory -> memory controller -> uart_tx -> "\x0h" -> Python
+- Read:
+    - Python -> uart_rx -> parser -> memory -> memory controller -> uart_tx -> 4 bits ->
+
 #### Gowin Specifics
 - Device: `GW2AR-LV18QN88C8/I7 C`
 - User buttons: 88, 87 (also inverted)
