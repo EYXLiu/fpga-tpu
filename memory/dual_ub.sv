@@ -8,12 +8,14 @@ module dual_unified_buffer #(
     input logic                   a_wr_en,
     input logic [ADDR_WIDTH-1:0]  a_addr,
     input logic [DATA_WIDTH-1:0]  a_wr_data,
+    input logic                   a_rd_en,
     output logic [DATA_WIDTH-1:0] a_rd_data,
 
     // port b
     input logic                   b_wr_en,
     input logic [ADDR_WIDTH-1:0]  b_addr,
     input logic [DATA_WIDTH-1:0]  b_wr_data,
+    input logic                   b_rd_en,
     output logic [DATA_WIDTH-1:0] b_rd_data
 );
 
@@ -23,13 +25,15 @@ module dual_unified_buffer #(
 
         if (a_wr_en)
             mem[a_addr] <= a_wr_data;
-        
-        a_rd_data <= mem[a_addr];
 
         if (b_wr_en)
             mem[b_addr] <= b_wr_data;
-        
-        b_rd_data <= mem[b_addr];
+
+        if (a_rd_en)
+            a_rd_data <= mem[a_addr];
+
+        if (b_rd_en)
+            b_rd_data <= mem[b_addr];
     
     end
 endmodule
