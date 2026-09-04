@@ -22,6 +22,9 @@ module nxn_matmul_controller #(
     output logic computing
 );
 
+    localparam ELEMENTS_PER_WORD = 4;
+    localparam WORDS_PER_ROW = (N + ELEMENTS_PER_WORD - 1) / ELEMENTS_PER_WORD;
+
     typedef enum logic [3:0] {
         IDLE,
 
@@ -40,9 +43,9 @@ module nxn_matmul_controller #(
     logic [7:0] A [0:N-1][0:N-1];
     logic [7:0] B [0:N-1][0:N-1];
 
-    // optimize for space (though an int is fine as well)
     integer row;
     integer compute_cycle;
+    integer word_idx;
 
     always_ff @(posedge clk) begin
 
@@ -52,6 +55,7 @@ module nxn_matmul_controller #(
 
             row <= 0;
             compute_cycle <= 0;
+            word_idx <= 0;
 
             a_rd_en <= 0;
             a_addr <= 0;
@@ -59,6 +63,7 @@ module nxn_matmul_controller #(
             b_addr <= 0;
 
             done <= 0;
+            computing <= 0;
         
         end 
         else begin
@@ -78,10 +83,10 @@ module nxn_matmul_controller #(
 
                 READ_REQ: begin
                     a_rd_en <= 1;
-                    a_addr <= 10'(row);
+                    a_addr <= 10'(row * WORDS_PER_ROW + word_idx);
 
                     b_rd_en <= 1;
-                    b_addr <= 10'(N + row);
+                    b_addr <= 10'(N * WORDS_PER_ROW + row * WORDS_PER_ROW + word_idx);
 
                     state <= READ_WAIT;
                 end
@@ -92,18 +97,39 @@ module nxn_matmul_controller #(
 
                 READ_CAPTURE: begin
 
-                    for (int j = 0; j < N; j++) begin
-                        A[row][j] <= a_rd_data[31 - j*8 -: 8];
-                        B[row][j] <= b_rd_data[31 - j*8 -: 8];
+                    for (int k = 0; k < ELEMENTS_PER_WORD; k++) begin
+
+                        int elem_idx;
+
+                        elem_idx = word_idx * ELEMENTS_PER_WORD + k;
+
+                        if (elem_idx < N) begin
+                            A[row][elem_idx] <= a_rd_data[31 - k*8 -: 8];
+                            B[row][elem_idx] <= b_rd_data[31 - k*8 -: 8];
+                        end
+
                     end
 
-                    if (row == N-1) begin
-                        row <= 0;
-                        compute_cycle <= 0;
-                        state <= COMPUTE;
-                    end else begin
-                        row <= row + 1;
+                    if (word_idx == WORDS_PER_ROW - 1) begin
+
+                        word_idx <= 0;
+
+                        if (row == N-1) begin
+                            row <= 0;
+                            compute_cycle <= 0;
+                            state <= COMPUTE;
+                        end
+                        else begin
+                            row <= row + 1;
+                            state <= READ_REQ;
+                        end
+
+                    end
+                    else begin
+
+                        word_idx <= word_idx + 1;
                         state <= READ_REQ;
+
                     end
                 end
 
