@@ -56,6 +56,7 @@ module sim;
     logic [7:0] b_in [0:N-1];
 
     logic [31:0] c [0:N-1][0:N-1];
+    logic computing;
 
     nxn_matmul_controller #(
         .N(N)
@@ -79,8 +80,8 @@ module sim;
 
         .c(c),
 
-        .done(done)
-
+        .done(done),
+        .computing(computing)
     );
 
     systolic_nxn #(
@@ -102,7 +103,7 @@ module sim;
     always @(posedge clk) begin
         #1;
 
-        if (controller.state == controller.COMPUTE) begin
+        if (computing) begin
             $display(
                 "cycle %0d | A = [%0d %0d %0d %0d] | B = [%0d %0d %0d %0d]",
                 controller.compute_cycle,

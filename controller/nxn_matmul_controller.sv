@@ -18,7 +18,8 @@ module nxn_matmul_controller #(
     output logic [7:0] b_in [0:N-1],
     input logic [31:0] c    [0:N-1][0:N-1],
 
-    output logic done
+    output logic done,
+    output logic computing
 );
 
     typedef enum logic [3:0] {
@@ -40,7 +41,7 @@ module nxn_matmul_controller #(
     logic [7:0] B [0:N-1][0:N-1];
 
     // optimize for space (though an int is fine as well)
-    logic [1:0] row;
+    integer row;
     integer compute_cycle;
 
     always_ff @(posedge clk) begin
@@ -91,17 +92,12 @@ module nxn_matmul_controller #(
 
                 READ_CAPTURE: begin
 
-                    A[row][0] <= a_rd_data[31:24];
-                    A[row][1] <= a_rd_data[23:16];
-                    A[row][2] <= a_rd_data[15:8];
-                    A[row][3] <= a_rd_data[7:0];
+                    for (int j = 0; j < N; j++) begin
+                        A[row][j] <= a_rd_data[31 - j*8 -: 8];
+                        B[row][j] <= b_rd_data[31 - j*8 -: 8];
+                    end
 
-                    B[row][0] <= b_rd_data[31:24];
-                    B[row][1] <= b_rd_data[23:16];
-                    B[row][2] <= b_rd_data[15:8];
-                    B[row][3] <= b_rd_data[7:0];
-
-                    if (row == 2'(N-1)) begin
+                    if (row == N-1) begin
                         row <= 0;
                         compute_cycle <= 0;
                         state <= COMPUTE;
@@ -112,6 +108,8 @@ module nxn_matmul_controller #(
                 end
 
                 COMPUTE: begin
+
+                    computing <= 1'b1;
 
                     for (int i = 0; i < N; i++) begin
 
@@ -135,6 +133,7 @@ module nxn_matmul_controller #(
 
                     if (compute_cycle == 3*N-3) begin
                         state <= FLUSH;
+                        computing <= 1'b0;
                     end
                     else begin
                         compute_cycle <= compute_cycle + 1;
