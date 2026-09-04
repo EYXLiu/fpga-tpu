@@ -1,4 +1,4 @@
-module systolic_nxn #(
+module systolic_nxm #(
     parameter N = 2, 
     parameter M = 3
 ) (

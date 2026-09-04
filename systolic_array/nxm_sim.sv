@@ -19,7 +19,7 @@ module sim;
 
     logic [31:0] c [0:1][0:2];
 
-    systolic_nxn #(
+    systolic_nxm #(
         .N(2),
         .M(3)
     ) dut (
