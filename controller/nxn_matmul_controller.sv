@@ -77,6 +77,7 @@ module nxn_matmul_controller #(
                 IDLE: begin
                     if (start) begin
                         row <= 0;
+                        word_idx <= 0;
                         state <= READ_REQ;
                     end
                 end
