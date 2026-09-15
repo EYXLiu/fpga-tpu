@@ -28,6 +28,7 @@
 - [x] 4x4 matmul on Tang Nano 20k testing
     - [x] loading through UART -> matmul -> retrieving from UART
 - [ ] nxn matmul on Tang Nano 20k testing
+    - For hardware constraints, the Tang Nano 20k only has 48 DSPs, and each PE takes 1 DSP, so we probably could not extend this much further
 - [ ] simulate a small neural network on the Tang Nano 20k
 - [ ] possibly crux of neural networks on Verilog
     - [ ] Forward pass
