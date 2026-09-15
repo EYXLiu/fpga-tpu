@@ -25,8 +25,10 @@
     - [x] 2x2, 3x3, 4x4, 8x8 verilator simulations
 - [x] n x m matmul controllers
     - [x] 2x4 * 4x3 verilator simulations
-- [x] 4x4 matmul on Tang Nano 20k testing
+- [x] matmul on Tang Nano 20k testing
     - [x] loading through UART -> matmul -> retrieving from UART
+    - [x] 4x4 matmul test suite
+    - [x] 2x2 matmul test suite
 - [ ] nxn matmul on Tang Nano 20k testing
     - For hardware constraints, the Tang Nano 20k only has 48 DSPs, and each PE takes 1 DSP, so we probably could not extend this much further
 - [ ] simulate a small neural network on the Tang Nano 20k
