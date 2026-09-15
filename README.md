@@ -4,7 +4,8 @@
 
 ## Notes
 - Each folder has notes for the specific part its dealing with for learning purposes
-- Each SystemVerilog module also has a test sim 
+- Each SystemVerilog module also has a test sim
+- The Tang Nano 20k has 48 DSPs (Digital Signal Processor)
 
 ## Core Features
 - [x] basic arithmetic
