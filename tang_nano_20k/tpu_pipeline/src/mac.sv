@@ -1,6 +1,7 @@
 module mac (
     input logic clk,
     input logic rst,
+    input logic clear,
 
     input logic [7:0] a,
     input logic [7:0] b,
@@ -10,7 +11,7 @@ module mac (
 
 
     always_ff @(posedge clk) begin
-        if (rst)
+        if (rst || clear)
             acc <= 32'd0;
         else
             acc <= acc + a * b;

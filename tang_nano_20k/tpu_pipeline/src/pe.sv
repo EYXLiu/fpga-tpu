@@ -1,6 +1,7 @@
 module pe (
     input logic clk,
     input logic rst,
+    input logic clear,
 
     input logic [7:0] a_in,
     input logic [7:0] b_in,
@@ -14,6 +15,7 @@ module pe (
     mac mac (
         .clk(clk),
         .rst(rst),
+        .clear(clear),
         .a(a_in),
         .b(b_in),
         .acc(acc)

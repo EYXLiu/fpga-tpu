@@ -116,6 +116,8 @@ module top (
 
     logic [31:0] c [0:3][0:3];
 
+    logic clear_matmul;
+
 
     nxn_matmul_controller #(
         .N(4),
@@ -137,7 +139,8 @@ module top (
         .c(c),
 
         .done(matmul_done),
-        .computing(matmul_computing)
+        .computing(matmul_computing),
+        .clear_matmul(clear_matmul)
     );
 
     // SYSTOLIC ARRAY
@@ -148,6 +151,7 @@ module top (
     ) systolic (
         .clk(clk),
         .rst(rst),
+        .clear(clear_matmul),
 
         .a_in(mat_a_in),
         .b_in(mat_b_in),
@@ -195,13 +199,16 @@ module top (
 
     always_ff @(posedge clk) begin
 
+        if (start_matmul) begin
+            debug_led <= ~debug_led;
+        end
+
         if (rst) begin
 
             state       <= TOP_IDLE;
             c_store_idx <= 5'd0;
 
             led       <= 1'b0;
-            debug_led <= 1'b0;
 
         end
 
@@ -225,8 +232,6 @@ module top (
                     if (matmul_done) begin
 
                         state <= TOP_WAIT;
-
-                        debug_led <= ~debug_led;
 
                     end
 

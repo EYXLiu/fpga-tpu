@@ -4,6 +4,7 @@ module systolic_array #(
 ) (
     input logic clk,
     input logic rst,
+    input logic clear,
 
     input logic [7:0] a_in [0:N-1],
     input logic [7:0] b_in [0:M-1],
@@ -35,6 +36,7 @@ module systolic_array #(
                 pe pe_inst (
                     .clk(clk),
                     .rst(rst),
+                    .clear(clear),
 
                     .a_in(a_wire[row][col]),
                     .b_in(b_wire[row][col]),

@@ -17,7 +17,8 @@ module nxn_matmul_controller #(
     input logic [31:0] c [0:N-1][0:K-1],
 
     output logic done,
-    output logic computing
+    output logic computing,
+    output logic clear_matmul
 );
 
     localparam ELEMENTS_PER_WORD = 4;
@@ -88,6 +89,8 @@ module nxn_matmul_controller #(
                 b_in[j] <= 8'd0;
             end
 
+            clear_matmul <= 1'b0;
+
         end
 
         else begin
@@ -95,6 +98,8 @@ module nxn_matmul_controller #(
             // Pulse signals
             mem_rd_en <= 1'b0;
             done      <= 1'b0;
+
+            clear_matmul <= 1'b0;
 
 
             case (state)
@@ -104,6 +109,8 @@ module nxn_matmul_controller #(
                     computing <= 1'b0;
 
                     if (start) begin
+
+                        clear_matmul <= 1'b1;
 
                         a_row      <= 0;
                         b_row      <= 0;
