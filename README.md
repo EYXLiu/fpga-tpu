@@ -1,11 +1,3 @@
-## GPU/TPU on an FPGA 
-- Currently writing verilog and verifying through verilator  
-- Next steps are to transfer it over to `Tang Nano 20k` for hardware testing 
-
-## Notes
-- Each folder has notes for the specific part its dealing with for learning purposes
-- Each SystemVerilog module also has a test sim
-
 ## Core Features
 - [x] basic arithmetic
 - [x] basic test synthesis + pin manipulation on Tang Nano 20k
@@ -35,3 +27,7 @@
 - [ ] possibly crux of neural networks on Verilog
     - [ ] Forward pass
     - [ ] Backpropagation
+     
+## Notes
+- Each folder has notes for the specific part its dealing with for learning purposes
+- Each SystemVerilog module also has a test sim
