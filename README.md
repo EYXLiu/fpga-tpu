@@ -1,3 +1,7 @@
+## TPU Pipeline
+Located in `tang_nano_20k` -> `tpu_pipeline`  
+Requires a Tang Nano 20k and GowinIDE  
+
 ## Core Features
 - [x] basic arithmetic
 - [x] basic test synthesis + pin manipulation on Tang Nano 20k
